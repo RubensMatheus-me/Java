@@ -1,6 +1,5 @@
 package chess;
 
-import java.nio.file.OpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
