@@ -3,7 +3,8 @@ package models;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
     private int positionX;
@@ -16,9 +17,17 @@ public class Player {
     private int height;
     private int widthImage;
     private int heightImage;
+    private List <Bullet> bullets;
+
+    private static final int DESLOCATION = 3;
+    private static final int INITIAL_DESLOCATIONX = 100;
+    private static final int INITIAL_DESLOCATIONY = 100;
+
     public Player() {
-        this.positionX = 100;
-        this.positionY = 100;
+        this.positionX = INITIAL_DESLOCATIONX;
+        this.positionY = INITIAL_DESLOCATIONY;
+
+        bullets = new ArrayList<Bullet>();
     }
     public void load() {
         ImageIcon loading = new ImageIcon("src/resources/Ship3.png");
@@ -27,76 +36,97 @@ public class Player {
         this.widthImage = this.image.getWidth(null);
     }
 
-    public int getPositionX() {
-        return positionX;
+    public void update() {
+        positionX += deslocationX;
+        positionY += deslocationY;
     }
 
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
+    public void simpleBullets() {
+        this.bullets.add(new Bullet(positionX + height, positionY + width / 2));
+    }
+
+    public void move(KeyEvent key) {
+        int code = key.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                this.deslocationY = -DESLOCATION;
+                break;
+            case KeyEvent.VK_DOWN:
+                this.deslocationY = DESLOCATION;
+                break;
+            case KeyEvent.VK_LEFT:
+                this.deslocationX = -DESLOCATION;
+                break;
+            case KeyEvent.VK_RIGHT:
+                this.deslocationX = DESLOCATION;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void stop(KeyEvent tecla) {
+        int code = tecla.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                deslocationY = 0;
+                break;
+            case KeyEvent.VK_DOWN:
+                deslocationY = 0;
+                break;
+            case KeyEvent.VK_LEFT:
+                deslocationX = 0;
+                break;
+            case KeyEvent.VK_RIGHT:
+                deslocationX = 0;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public int getPositionX() {
+        return positionX;
     }
 
     public int getPositionY() {
         return positionY;
     }
 
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
-    }
-
     public int getDeslocationX() {
         return deslocationX;
-    }
-
-    public void setDeslocationX(int deslocationX) {
-        this.deslocationX = deslocationX;
     }
 
     public int getDeslocationY() {
         return deslocationY;
     }
 
-    public void setDeslocationY(int deslocationY) {
-        this.deslocationY = deslocationY;
-    }
 
     public Image getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
 
     public int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
 
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public int getWidthImage() {
         return widthImage;
     }
 
-    public void setWidthImage(int widthImage) {
-        this.widthImage = widthImage;
-    }
 
     public int getHeightImage() {
         return heightImage;
     }
 
-    public void setHeightImage(int heightImage) {
-        this.heightImage = heightImage;
+    public List<Bullet> getBullets() {
+        return bullets;
     }
 
 
