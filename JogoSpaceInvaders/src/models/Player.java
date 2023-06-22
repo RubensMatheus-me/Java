@@ -3,7 +3,7 @@ package models;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class Player {
     private int positionX;
@@ -16,9 +16,17 @@ public class Player {
     private int height;
     private int widthImage;
     private int heightImage;
+    private ArrayList <Bullet> bullets;
+
+    private static final int DESLOCATION = 4;
+    private static final int INITIAL_DESLOCATIONX = 100;
+    private static final int INITIAL_DESLOCATIONY = 100;
+
     public Player() {
-        this.positionX = 100;
-        this.positionY = 100;
+        this.positionX = INITIAL_DESLOCATIONX;
+        this.positionY = INITIAL_DESLOCATIONY;
+
+        bullets = new ArrayList<Bullet>();
     }
     public void load() {
         ImageIcon loading = new ImageIcon("src/resources/Ship3.png");
@@ -32,38 +40,54 @@ public class Player {
         positionY += deslocationY;
     }
 
-    public void keyPressed(KeyEvent key) {
-        int code = key.getKeyCode();
+    public void simpleBullets() {
+        this.bullets.add(new Bullet(positionX + height, positionY + width / 2));
+    }
 
-        if(code == KeyEvent.VK_UP) {
-            deslocationY =- 3;
-        }
-        if(code == KeyEvent.VK_DOWN) {
-            deslocationY = 3;
-        }
-        if(code == KeyEvent.VK_LEFT) {
-            deslocationX =- 3;
-        }
-        if(code == KeyEvent.VK_RIGHT) {
-            deslocationX = 3;
+    public void move(KeyEvent key) {
+        int code = key.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                this.deslocationY = -DESLOCATION;
+                break;
+            case KeyEvent.VK_DOWN:
+                this.deslocationY = DESLOCATION;
+                break;
+            case KeyEvent.VK_LEFT:
+                this.deslocationX = -DESLOCATION;
+                break;
+            case KeyEvent.VK_RIGHT:
+                this.deslocationX = DESLOCATION;
+                break;
+            default:
+                break;
         }
     }
 
-    public void keyRelease(KeyEvent key) {
-        int code = key.getKeyCode();
-
-        if(code == KeyEvent.VK_UP) {
-            deslocationY = 0;
+    public void stop(KeyEvent tecla) {
+        int code = tecla.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                deslocationY = 0;
+                break;
+            case KeyEvent.VK_DOWN:
+                deslocationY = 0;
+                break;
+            case KeyEvent.VK_LEFT:
+                deslocationX = 0;
+                break;
+            case KeyEvent.VK_RIGHT:
+                deslocationX = 0;
+                break;
+            default:
+                break;
         }
-        if(code == KeyEvent.VK_DOWN) {
-            deslocationY = 0;
-        }
-        if(code == KeyEvent.VK_LEFT) {
-            deslocationX = 0;
-        }
-        if(code == KeyEvent.VK_RIGHT) {
-            deslocationX = 0;
-        }
+    }
+    public void shoot(){
+        int frontShip = this.positionX + this.width;
+        int middleShip = this.positionY + (this.width / 2);
+        Bullet bullet = new Bullet(frontShip, middleShip);
+        this.bullets.add(bullet);
     }
 
     public int getPositionX() {
@@ -97,10 +121,6 @@ public class Player {
         return height;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public int getWidthImage() {
         return widthImage;
     }
@@ -110,6 +130,9 @@ public class Player {
         return heightImage;
     }
 
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
 
 
 }
